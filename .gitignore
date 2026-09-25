@@ -1,0 +1,3 @@
+*.ckp.gz
+__pycache__/
+*.pyc
