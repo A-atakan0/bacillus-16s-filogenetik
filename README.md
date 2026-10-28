@@ -1,48 +1,69 @@
-# Bacillus Türlerinin 16S rRNA Temelli Filogenetik Analizi
+# 16S rRNA-Based Phylogenetic Analysis of *Bacillus* Species
 
-## Amaç
-Bu proje, halka açık NCBI veri tabanından elde edilen 16S rRNA dizileri kullanılarak
-15 farklı *Bacillus* türü arasındaki evrimsel ilişkiyi filogenetik ağaç ile
-görselleştirmeyi amaçlamaktadır. Proje, biyoinformatik iş akışlarını (veri toplama,
-hizalama, ağaç kurma, görselleştirme) uçtan uca uygulamak amacıyla hazırlanmış bir
-öğrenme/portföy çalışmasıdır.
+> 🇹🇷 **Türkçe özet:** NCBI'dan indirilen 16S rRNA dizileriyle 15 *Bacillus* türünün evrimsel ilişkisi MAFFT hizalaması ve IQ-TREE maksimum olabilirlik ağacıyla incelenmiştir. Ağaç, bilinen *B. cereus* ve *B. pumilus* gruplarıyla tutarlıdır.
 
-## Veri Kaynağı
-- NCBI Nucleotide veritabanı (Entrez API üzerinden Biopython ile otomatik indirildi)
-- Arama kriteri: Bacillus[Organism] AND 16S ribosomal RNA[Title] AND 1200:1600[Sequence Length]
-- 15 farklı tür, her türden tek örnek
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white) ![Conda](https://img.shields.io/badge/env-conda-44A833?logo=anaconda&logoColor=white)
 
-## Yöntem
-1. Veri indirme: Biopython (Entrez) ile NCBI'dan FASTA formatında dizi indirme
-2. Çoklu dizilim: MAFFT (--auto) ile hizalama
-3. Filogenetik ağaç: IQ-TREE (ModelFinder Plus ile model seçimi, 1000 ultrafast bootstrap)
-4. Görselleştirme: Biopython Phylo + Matplotlib
+## Objective
 
-## Kullanılan Araçlar
-Python 3.10, Biopython, BLAST, MAFFT, IQ-TREE, Matplotlib (Conda ortamı: biyoinfo)
+This project reconstructs the evolutionary relationships among 15 *Bacillus* species from publicly available 16S rRNA sequences (NCBI). It is a learning/portfolio project that implements a complete phylogenetics workflow end to end: data retrieval → multiple sequence alignment → tree inference → visualisation.
 
-## Nasıl Çalıştırılır
+## Result
+
+![Bacillus 16S rRNA maximum-likelihood tree](figures/bacillus_tree_labeled.png)
+
+The tree is consistent with known taxonomic groupings:
+
+- ***B. cereus* group:** *B. cereus*, *B. anthracis* and *B. paramycoides* cluster together (bootstrap 100 / 62)
+- ***B. licheniformis* / *B. paralicheniformis*:** grouped with 100% bootstrap support
+- ***B. pumilus* group:** *B. pumilus*, *B. altitudinis* and *B. stratosphericus* fall in the same clade
+
+## Data
+
+- **Source:** NCBI Nucleotide, downloaded automatically through the Entrez API with Biopython
+- **Query:** `Bacillus[Organism] AND 16S ribosomal RNA[Title] AND 1200:1600[Sequence Length]`
+- 15 species, one sequence per species
+
+## Methods
+
+| Step | Tool |
+|---|---|
+| Data retrieval | Biopython (Entrez) → FASTA |
+| Multiple sequence alignment | MAFFT (`--auto`) |
+| Tree inference | IQ-TREE (ModelFinder Plus model selection, 1000 ultrafast bootstraps) |
+| Visualisation | Biopython Phylo + Matplotlib |
+
+## How to Run
+
+```bash
 conda create -n biyoinfo python=3.10 -y
 conda activate biyoinfo
 conda install -c bioconda -c conda-forge blast mafft iqtree biopython matplotlib -y
+
 cd scripts
 python download_data.py
 mafft --auto ../data/bacillus_16s_raw.fasta > ../data/bacillus_16s_aligned.fasta
 iqtree -s ../data/bacillus_16s_aligned.fasta -m MFP -bb 1000 -nt AUTO -pre ../results/bacillus_tree
 python plot_tree.py
+```
 
-## Sonuçlar
-Ağaç, bilinen taksonomik gruplarla tutarlı sonuçlar vermiştir:
-- B. cereus, B. anthracis, B. paramycoides: "Bacillus cereus grubu" olarak bilinen kümede birlikte (bootstrap %100/%62)
-- B. licheniformis, B. paralicheniformis: yüksek bootstrap (%100) ile birlikte
-- B. pumilus, B. altitudinis, B. stratosphericus: "Bacillus pumilus grubu" ile örtüşen kümede
+## Repository Structure
 
-![Filogenetik Agac](figures/bacillus_tree_labeled.png)
+```
+bacillus-16s-filogenetik/
+├── data/        # raw and aligned 16S FASTA files
+├── scripts/     # download_data.py, plot_tree.py
+├── results/     # IQ-TREE outputs (.treefile, .contree, .iqtree, .log …)
+├── figures/     # tree images
+└── environment_list.txt
+```
 
-## Sinirliliklar
-- Tek gen bolgesi (16S rRNA) kullanilmistir; bu bolge yakin akraba turleri ayirt etmekte sinirli cozunurluge sahiptir.
-- Bazi dallanmalarda bootstrap degerleri dusuktur (%15-32), bu dallanmalarin istatistiksel guveni sinirlidir.
-- Kucuk orneklem (15 tur, tur basina tek dizi) nedeniyle sonuclar genellenebilir bir taksonomik revizyon niteligi tasimamaktadir; bu bir portfoy/ogrenme calismasidir.
+## Limitations
 
-## Yazar
-Atakan Aslan - Molekuler Biyoloji ve Genetik, Sivas Cumhuriyet Universitesi
+- Only a single locus (16S rRNA) is used; it has limited resolution for closely related species.
+- Some branches have low bootstrap support (15–32%), so those splits are not statistically reliable.
+- Small sample (15 species, one sequence each): results are not a taxonomic revision. This is a learning/portfolio project.
+
+## Author
+
+**Atakan Aslan** · Molecular Biology and Genetics, Sivas Cumhuriyet University
