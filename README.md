@@ -1,7 +1,5 @@
 # 16S rRNA-Based Phylogenetic Analysis of *Bacillus* Species
 
-> 🇹🇷 **Türkçe özet:** NCBI'dan indirilen 16S rRNA dizileriyle 15 *Bacillus* türünün evrimsel ilişkisi MAFFT hizalaması ve IQ-TREE maksimum olabilirlik ağacıyla incelenmiştir. Ağaç, bilinen *B. cereus* ve *B. pumilus* gruplarıyla tutarlıdır.
-
 ![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white) ![Conda](https://img.shields.io/badge/env-conda-44A833?logo=anaconda&logoColor=white)
 
 ## Objective
